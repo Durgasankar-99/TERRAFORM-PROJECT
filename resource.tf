@@ -149,25 +149,3 @@ resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.subnet_1.id
   route_table_id = aws_route_table.main.id
 }
-
-resource "aws_route_table_association" "b" {
-  subnet_id      = aws_subnet.subnet_2.id
-  route_table_id = aws_route_table.main.id
-}
-resource "aws_autoscaling_group" "app_asg" {
-  launch_configuration = aws_launch_configuration.app_lc.id
-  min_size            = 2
-  max_size            = 5
-  desired_capacity    = 2
-  vpc_zone_identifier = [aws_subnet.subnet_1.id, aws_subnet.subnet_2.id]
-
-  tag {
-    key                 = "Name"
-    value               = "AutoScaledApp"
-    propagate_at_launch = true
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
